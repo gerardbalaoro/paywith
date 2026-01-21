@@ -95,5 +95,6 @@ export const best = (
         rewardLabel: bestReward ? describe(bestReward) : undefined,
       }
     })
+    .filter((result) => result.rewardId !== undefined)
     .sort((a, b) => b.value - a.value)
 }
