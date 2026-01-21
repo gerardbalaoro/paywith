@@ -6,6 +6,7 @@ enum PresetCategory {
   Drugstore = 'drugstore',
   Utilities = 'utilities',
   Retail = 'retail',
+  Robinsons = 'robinsons',
 }
 
 export const CategoriesData: Category[] = [
@@ -13,6 +14,7 @@ export const CategoriesData: Category[] = [
   { id: PresetCategory.Drugstore, label: 'Drugstore' },
   { id: PresetCategory.Utilities, label: 'Utilities' },
   { id: PresetCategory.Retail, label: 'Retail' },
+  { id: PresetCategory.Robinsons, label: 'Robinsons' },
 ]
 
 export const PaymentMethodsData: PaymentMethod[] = [
@@ -95,6 +97,48 @@ export const PaymentMethodsData: PaymentMethod[] = [
         isFixed: true,
         minSpend: 100,
         categories: [],
+      },
+    ],
+  },
+  {
+    id: 'GOTYME_CARD',
+    name: 'GoTyme Card',
+    rewards: [
+      {
+        id: uuid(),
+        type: 'points',
+        value: 0,
+        isFixed: false,
+        minSpend: 0,
+        categories: [PresetCategory.Robinsons],
+        earnRate: 100,
+        redemptionRate: 1,
+      },
+      {
+        id: uuid(),
+        type: 'points',
+        value: 0,
+        isFixed: false,
+        minSpend: 0,
+        categories: [],
+        earnRate: 500,
+        redemptionRate: 1,
+      },
+    ],
+  },
+  {
+    id: 'GOTYME_QR',
+    name: 'GoTyme QR',
+    rewards: [
+      {
+        id: uuid(),
+        type: 'points',
+        value: 0,
+        isFixed: false,
+        minSpend: 0,
+        categories: [],
+        earnRate: 600,
+        redemptionRate: 1,
       },
     ],
   },
