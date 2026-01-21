@@ -1,33 +1,42 @@
+import { useMemo } from 'react'
 import { useAtomValue } from 'jotai'
-import { XIcon } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import {
   Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
   ComboboxContent,
-  ComboboxInput,
+  ComboboxEmpty,
   ComboboxItem,
   ComboboxList,
+  ComboboxValue,
+  useComboboxAnchor,
 } from '@/components/ui/combobox'
 import { Label } from '@/components/ui/label'
 import { Categories } from '@/lib/store'
 
 type RewardCategoriesProps = {
   selectedCategories: string[]
-  onToggle: (categoryId: string) => void
-  onAdd: (categoryId: string) => void
+  onChange: (categories: string[]) => void
 }
 
 export function RewardCategories({
   selectedCategories,
-  onToggle,
-  onAdd,
+  onChange,
 }: RewardCategoriesProps) {
   const categories = useAtomValue(Categories.atom)
+  const anchor = useComboboxAnchor()
 
-  // "Global" is represented by empty array, so we don't list it
-  const availableCategories = categories.filter(
-    (c) => !selectedCategories.includes(c.id),
+  const categoryMap = useMemo(
+    () => new Map(categories.map((category) => [category.id, category.label])),
+    [categories],
+  )
+
+  const items = useMemo(
+    () => categories.map((category) => category.id),
+    [categories],
   )
 
   const isGlobal = selectedCategories.length === 0
@@ -35,45 +44,42 @@ export function RewardCategories({
   return (
     <div className="space-y-1.5">
       <Label className="text-xs">Categories</Label>
-      <div className="flex flex-wrap gap-1.5">
-        {isGlobal ? (
-          <Badge variant="secondary" className="gap-1">
-            All Categories
-          </Badge>
-        ) : (
-          selectedCategories.map((catId) => {
-            const cat = categories.find((c) => c.id === catId)
-            return (
-              <Badge key={catId} variant="secondary" className="gap-1 pr-1">
-                {cat?.label ?? catId}
-                <button
-                  type="button"
-                  onClick={() => onToggle(catId)}
-                  className="hover:bg-muted rounded-full p-0.5"
-                >
-                  <XIcon className="size-3" />
-                </button>
-              </Badge>
-            )
-          })
-        )}
-      </div>
+      {isGlobal && (
+        <Badge variant="secondary" className="gap-1">
+          All Categories
+        </Badge>
+      )}
       <Combobox
-        value={null}
-        onValueChange={(value) => {
-          if (value) {
-            onAdd(value)
-          }
+        multiple
+        autoHighlight
+        items={items}
+        value={selectedCategories}
+        onValueChange={(value: string[]) => {
+          onChange(value)
         }}
       >
-        <ComboboxInput placeholder="Add category..." className="h-8 w-full" />
-        <ComboboxContent>
+        <ComboboxChips ref={anchor} className="w-full">
+          <ComboboxValue>
+            {(values: string[]) => (
+              <>
+                {values.map((value: string) => (
+                  <ComboboxChip key={value}>
+                    {categoryMap.get(value) ?? value}
+                  </ComboboxChip>
+                ))}
+                <ComboboxChipsInput placeholder="Add category..." />
+              </>
+            )}
+          </ComboboxValue>
+        </ComboboxChips>
+        <ComboboxContent anchor={anchor}>
+          <ComboboxEmpty>No categories found.</ComboboxEmpty>
           <ComboboxList>
-            {availableCategories.map((cat) => (
-              <ComboboxItem key={cat.id} value={cat.id}>
-                {cat.label}
+            {(item: string) => (
+              <ComboboxItem key={item} value={item}>
+                {categoryMap.get(item) ?? item}
               </ComboboxItem>
-            ))}
+            )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>

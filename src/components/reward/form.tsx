@@ -63,20 +63,8 @@ export function RewardForm({ onAdd }: RewardFormProps) {
     setDraft(createRewardDraft())
   }
 
-  const handleToggleCategory = (categoryId: string) => {
-    setDraft((d) => ({
-      ...d,
-      categories: d.categories.filter((c) => c !== categoryId),
-    }))
-  }
-
-  const handleAddCategory = (categoryId: string) => {
-    if (!draft.categories.includes(categoryId)) {
-      setDraft((d) => ({
-        ...d,
-        categories: [...d.categories, categoryId],
-      }))
-    }
+  const handleCategoriesChange = (categories: string[]) => {
+    setDraft((d) => ({ ...d, categories }))
   }
 
   return (
@@ -103,8 +91,7 @@ export function RewardForm({ onAdd }: RewardFormProps) {
 
       <RewardCategories
         selectedCategories={draft.categories}
-        onToggle={handleToggleCategory}
-        onAdd={handleAddCategory}
+        onChange={handleCategoriesChange}
       />
 
       <div className="space-y-3">

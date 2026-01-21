@@ -18,15 +18,8 @@ export function RewardEditor({
   onUpdate,
   onRemove,
 }: RewardEditorProps) {
-  const handleToggleCategory = (categoryId: string) => {
-    const newCategories = reward.categories.filter((c) => c !== categoryId)
-    onUpdate({ categories: newCategories })
-  }
-
-  const handleAddCategory = (categoryId: string) => {
-    if (!reward.categories.includes(categoryId)) {
-      onUpdate({ categories: [...reward.categories, categoryId] })
-    }
+  const handleCategoriesChange = (categories: string[]) => {
+    onUpdate({ categories })
   }
 
   return (
@@ -57,8 +50,7 @@ export function RewardEditor({
 
       <RewardCategories
         selectedCategories={reward.categories}
-        onToggle={handleToggleCategory}
-        onAdd={handleAddCategory}
+        onChange={handleCategoriesChange}
       />
 
       <div className="space-y-3">
