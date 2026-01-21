@@ -1,0 +1,8 @@
+pre-commit:
+  jobs:
+    - run: bunx prettier --write --ignore-unknown {staged_files}
+      glob: '*.*'
+      stage_fixed: true
+    - run: bunx eslint --fix --no-warn-ignored {staged_files}
+      glob: '*.{css,ts,tsx,js,jsx}'
+      stage_fixed: true
