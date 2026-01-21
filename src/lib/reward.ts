@@ -1,5 +1,9 @@
 import type { PaymentMethod, Reward } from '@/lib/schema'
 
+const formatter = new Intl.NumberFormat(undefined, {
+  maximumFractionDigits: 2,
+})
+
 /** Result of calculating the best reward for a payment method */
 export type RewardResult = {
   methodId: string
@@ -40,12 +44,12 @@ export const calculate = (amount: number, reward: Reward): number => {
 export const describe = (reward: Reward): string => {
   if (reward.type === 'cashback') {
     if (reward.isFixed) {
-      return `${reward.value.toFixed(2)} cashback`
+      return `${formatter.format(reward.value)} cashback`
     }
-    return `${(reward.value * 100).toFixed(2)}% cashback`
+    return `${formatter.format(reward.value * 100)}% cashback`
   }
 
-  return `1 point per ${(reward.earnRate ?? 0).toFixed(2)} spent`
+  return `1 point per ${formatter.format(reward.earnRate ?? 0)} spent`
 }
 
 /**
