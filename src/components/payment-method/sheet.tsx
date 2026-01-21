@@ -102,7 +102,7 @@ export function PaymentMethodSheet() {
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>
       <SheetContent
         side="right"
-        className="w-full! flex h-full min-h-0 flex-col"
+        className="w-full! flex h-full min-h-0 flex-col gap-0"
       >
         <SheetHeader>
           <SheetTitle>
@@ -134,10 +134,10 @@ export function PaymentMethodSheet() {
           </div>
         </ScrollArea>
 
-        <SheetFooter>
+        <SheetFooter className="grid grid-cols-1 md:grid-cols-2">
           <SheetClose render={<Button variant="outline">Cancel</Button>} />
           <Button onClick={handleSave} disabled={!name.trim()}>
-            {method ? 'Save Changes' : 'Add Method'}
+            Save
           </Button>
         </SheetFooter>
       </SheetContent>

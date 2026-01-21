@@ -233,9 +233,7 @@ export function DataManagement() {
             </p>
           </DialogBody>
           <DialogFooter>
-            <DialogClose>
-              <Button variant="outline">Close</Button>
-            </DialogClose>
+            <DialogClose render={<Button variant="outline">Close</Button>} />
             <Button onClick={handleDownloadJson}>
               <DownloadIcon className="size-4" />
               Download JSON
@@ -334,9 +332,7 @@ export function DataManagement() {
                 Back
               </Button>
             )}
-            <DialogClose>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
+            <DialogClose render={<Button variant="outline">Cancel</Button>} />
           </DialogFooter>
         </DialogContent>
       </Dialog>
