@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="icon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:oklch(0.65 0.18 132);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:oklch(0.45 0.15 132);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background Shape: Rounded Square -->
+  <rect width="28" height="28" x="2" y="2" rx="8" fill="url(#icon-grad)" />
+  
+  <!-- Stylized "P" with a modern line feel -->
+  <path d="M12 23V9H17C19.2091 9 21 10.7909 21 13C21 15.2091 19.2091 17 17 17H12" 
+        stroke="white" 
+        stroke-width="3" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="none" />
+</svg>
