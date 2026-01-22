@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { CalculatorIcon, SettingsIcon } from 'lucide-react'
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Calculator } from '@/components/calculator'
 import { Settings } from '@/components/settings/settings'
+import { Categories, PaymentMethods, getInitialData } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
 export function App() {
   const [activeTab, setActiveTab] = useState('calculator')
+  const setCategories = useSetAtom(Categories.atom)
+  const setMethods = useSetAtom(PaymentMethods.atom)
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: dark)')
@@ -18,6 +22,12 @@ export function App() {
     media.addEventListener?.('change', update)
     return () => media.removeEventListener?.('change', update)
   }, [])
+
+  useEffect(() => {
+    const { categories, methods } = getInitialData()
+    setCategories(categories)
+    setMethods(methods)
+  }, [setCategories, setMethods])
 
   return (
     <div className="min-h-screen bg-linear-to-b from-background to-muted/30 pb-20 md:pb-0">

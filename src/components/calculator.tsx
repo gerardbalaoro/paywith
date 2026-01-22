@@ -174,9 +174,16 @@ export function Calculator() {
   const [amount, setAmount] = useState(0)
   const [categoryId, setCategoryId] = useState(() => categories[0]?.id ?? '')
 
+  const activeCategoryId =
+    categories.length === 0
+      ? ''
+      : categories.some((cat) => cat.id === categoryId)
+        ? categoryId
+        : (categories[0]?.id ?? '')
+
   const results = useMemo(
-    () => best(amount, categoryId, methods),
-    [amount, categoryId, methods],
+    () => best(amount, activeCategoryId, methods),
+    [amount, activeCategoryId, methods],
   )
 
   return (
@@ -184,7 +191,7 @@ export function Calculator() {
       <Card className="border-0 shadow-lg bg-linear-to-br from-card to-card/80">
         <CardContent className="space-y-5">
           <AmountInput value={amount} onChange={setAmount} />
-          <CategorySelector value={categoryId} onChange={setCategoryId} />
+          <CategorySelector value={activeCategoryId} onChange={setCategoryId} />
         </CardContent>
       </Card>
       <ResultsList results={results} />

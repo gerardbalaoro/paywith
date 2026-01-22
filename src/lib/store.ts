@@ -1,8 +1,12 @@
 import { atomWithStorage, createJSONStorage } from 'jotai/utils'
+import { z } from 'zod'
 import { v4 as uuid } from 'uuid'
 
 import { Category, PaymentMethod, Reward } from '@/lib/schema'
 import { CategoriesData, PaymentMethodsData } from '@/lib/data'
+
+const CategoriesStorageKey = 'paywith-categories'
+const MethodsStorageKey = 'paywith-methods'
 
 const createStorage = <T>() =>
   createJSONStorage<T>(() =>
@@ -21,9 +25,10 @@ const createStorage = <T>() =>
 
 export const Categories = {
   atom: atomWithStorage<Category[]>(
-    'paywith-categories',
-    CategoriesData,
+    CategoriesStorageKey,
+    [],
     createStorage<Category[]>(),
+    { getOnInit: false },
   ),
 
   add: (categories: Category[], label: string): Category[] => {
@@ -71,9 +76,10 @@ export const Categories = {
 
 export const PaymentMethods = {
   atom: atomWithStorage<PaymentMethod[]>(
-    'paywith-methods',
-    PaymentMethodsData,
+    MethodsStorageKey,
+    [],
     createStorage<PaymentMethod[]>(),
+    { getOnInit: false },
   ),
 
   add: (methods: PaymentMethod[], name: string): PaymentMethod[] => {
@@ -104,6 +110,49 @@ export const PaymentMethods = {
   remove: (methods: PaymentMethod[], id: string): PaymentMethod[] => {
     return methods.filter((m) => m.id !== id)
   },
+}
+
+// =============================================================================
+// Client-only initialization
+// =============================================================================
+
+const parseStored = <T>(
+  value: string | null,
+  schema: z.ZodType<T>,
+): T | null => {
+  if (!value) {
+    return null
+  }
+  try {
+    const parsedJson: unknown = JSON.parse(value)
+    const parsed = schema.safeParse(parsedJson)
+    return parsed.success ? parsed.data : null
+  } catch {
+    return null
+  }
+}
+
+export const getInitialData = (): {
+  categories: Category[]
+  methods: PaymentMethod[]
+} => {
+  if (typeof window === 'undefined') {
+    return { categories: [], methods: [] }
+  }
+
+  const storedCategories = parseStored(
+    window.localStorage.getItem(CategoriesStorageKey),
+    z.array(Category),
+  )
+  const storedMethods = parseStored(
+    window.localStorage.getItem(MethodsStorageKey),
+    z.array(PaymentMethod),
+  )
+
+  return {
+    categories: storedCategories ?? CategoriesData,
+    methods: storedMethods ?? PaymentMethodsData,
+  }
 }
 
 // =============================================================================
