@@ -14,7 +14,7 @@ bun run dev
 ## ✨ Features
 
 - **Reward Calculator**: Find the best card for amount + category.
-- **Data Portability**: Sync via QR codes (CBOR/Base45).
+- **Data Portability**: Import/export settings via JSON files.
 - **Privacy**: All data stays in `localStorage`. No backend.
 
 ## 🛠️ Build
